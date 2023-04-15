@@ -50,7 +50,7 @@ class BinarySearchTree {
     // throw new NotImplementedError('Not implemented');
     // remove line with error and write your code here
     // const res = this.find(data)
-    return this.find(data) instanceof Node;
+    return !!this.find(data);
   }
 
   find(/* data */ data) {
@@ -66,67 +66,49 @@ class BinarySearchTree {
   }
 
   remove(/* data */ data) {
-    throw new NotImplementedError("Not implemented");
-    // remove line with error and write your code here
-
-    if (!this.head) {
-      return;
-    }
-
-    let current = this.head;
-    while (current) {
-      if (current.data > data) {
-        if (current.left) {
-          current = current.left;
-        } else {
-          return;
-        }
-      } else if (current.data < data) {
-        if (current.right) {
-          current = current.right;
-        } else {
-          return;
-        }
-      } else if (current.data === data) {
-        if (current.right) {
-          let changing = current.right;
-          while (changing.left.left) {
-            changing = changing.left;
-          }
-          current.data = changing.left.data;
-          changing.left = null;
-        } else if (current.left) {
-          let changing = current.left;
-          while (changing.right.right) {
-            changing = changing.right;
-          }
-          current.data = changing.right.data;
-          changing.right = null;
-        }
-      }
-    }
-  }
-
-  min() {
     // throw new NotImplementedError('Not implemented');
     // remove line with error and write your code here
+    this._deleteNode(data);
+  }
+
+  min(root) {
+    // throw new NotImplementedError('Not implemented');
+    // remove line with error and write your code here
+
     if (!this.head) return null;
-    let current = this.head;
+    if (!root) root = this.head;
+
+    let current = root;
     while (current.left) {
       current = current.left;
     }
     return current.data;
   }
 
-  max() {
+  max(root) {
     // throw new NotImplementedError('Not implemented');
     // remove line with error and write your code here
+
     if (!this.head) return null;
-    let current = this.head;
+    if (!root) root = this.head;
+
+    let current = root;
     while (current.right) {
       current = current.right;
     }
     return current.data;
+  }
+  _deleteNode(root, key) {
+    if (root == null) return root;
+    if (key < root.key) root.left = this._deleteNode(root.left, key);
+    else if (key > root.key) root.right = this._deleteNode(root.right, key);
+    else {
+      if (root.left == null) return root.right;
+      else if (root.right == null) return root.left;
+      root.key = min(root.right);
+      root.right = this._deleteNode(root.right, root.key);
+    }
+    return root;
   }
 }
 
